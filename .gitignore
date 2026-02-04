@@ -21,3 +21,6 @@ app.db-wal
 # --- VS / VSCode ---
 .vscode/
 .idea/
+
+# Database Migration
+Data/Migration/
