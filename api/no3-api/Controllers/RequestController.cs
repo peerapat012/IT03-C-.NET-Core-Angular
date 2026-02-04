@@ -39,26 +39,26 @@ public class RequestController(IRequestServices services) : ControllerBase
     }
 
     [HttpPatch("{id}/approve")]
-    public async Task<ActionResult> ApproveRequestAsync(int id)
+    public async Task<ActionResult> ApproveRequestAsync(int id, ApproveOrRejectDto requestDto)
     {
         var existingRequest = await services.GetRequestByIdAsync(id);
         if (existingRequest?.Status == RequestStatus.Approved)
             return NotFound("This request with the given id is already approved");
 
-        var updatedRequest = await services.ApproveRequestAsync(id, 0);
+        var updatedRequest = await services.ApproveRequestAsync(id, 0, requestDto.ResponseReason);
         return updatedRequest
             ? Ok(await services.GetRequestByIdAsync(id))
             : NotFound("Request with the given id does not exist");
     }
 
     [HttpPatch("{id}/reject")]
-    public async Task<ActionResult> RejectRequestAsync(int id)
+    public async Task<ActionResult> RejectRequestAsync(int id, ApproveOrRejectDto requestDto)
     {
         var existingRequest = await services.GetRequestByIdAsync(id);
         if (existingRequest?.Status == RequestStatus.Rejected)
             return NotFound("This request with the given id is already rejected");
 
-        var updatedRequest = await services.ApproveRequestAsync(id, 1);
+        var updatedRequest = await services.ApproveRequestAsync(id, 1, requestDto.ResponseReason);
         return updatedRequest
             ? Ok(await services.GetRequestByIdAsync(id))
             : NotFound("Request with the given id does not exist");

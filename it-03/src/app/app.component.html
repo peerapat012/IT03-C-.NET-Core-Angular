@@ -1,11 +1,4 @@
 <style>
-  body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-    padding: 20px 0;
-  }
-
   /* Fade in animation */
   @keyframes fadeInUp {
     from {
@@ -352,18 +345,6 @@
 
 <main class="main">
   <div class="main container main-container">
-    <!-- Page Header -->
-    <!-- <div class="page-header">
-      <h1>
-        <i class="fas fa-tasks"></i>
-        Request Management System
-      </h1>
-      <p class="mb-0 mt-2 opacity-75">
-        <i class="fas fa-info-circle"></i>
-        Review and manage pending requests
-      </p>
-    </div> -->
-
     <!-- Request Card -->
     <div class="request-card">
       <!-- Card Header -->
@@ -376,11 +357,13 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <button class="btn btn-approve" data-bs-toggle="modal" data-bs-target="#approveModal" (click)="openModal(true)">
+        <button class="btn btn-approve" [disabled]="selectedIds.length == 0" data-bs-toggle="modal"
+          data-bs-target="#inputModal" (click)="openModal(true)">
           <i class="fas fa-check-circle"></i>
           Approve Selected
         </button>
-        <button class="btn btn-reject" data-bs-toggle="modal" data-bs-target="#approveModal" (click)="openModal(false)">
+        <button class="btn btn-reject" [disabled]="selectedIds.length == 0" data-bs-toggle="modal"
+          data-bs-target="#inputModal" (click)="openModal(false)">
           <i class="fas fa-times-circle"></i>
           Reject Selected
         </button>
@@ -406,37 +389,42 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr *ngFor="let request of datas">
               <td>
-                <input type="checkbox" class="custom-checkbox">
+                <input type="checkbox" class="custom-checkbox" [checked]="isChecked(request.id)"
+                  (change)="onCheckboxChange($event, request.id)" [value]="request.id"
+                  [disabled]="isDisable(request.status)">
               </td>
               <td>
                 <i class="fas fa-user-circle text-primary"></i>
-                John Anderson
+                {{request.title}}
               </td>
-              <td>Leave Application</td>
+              <td>{{request.responseReason}}</td>
               <td>
+                @if(request.status == 1)
+                {
+                <span class="status-badge status-rejected">
+                  <i class="fas fa-times-circle"></i> Reject
+                </span>
+                }@else if (request.status == 2) {
                 <span class="status-badge status-pending">
                   <i class="fas fa-clock"></i> Pending
                 </span>
+                }@else {
+                <span class="status-badge status-approved">
+                  <i class="fas fa-check-circle"></i> Approve
+                </span>
+                }
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-
-    <!-- Footer Info -->
-    <div class="text-center mt-4 text-muted" style="animation: fadeInUp 1s ease-out;">
-      <small>
-        <i class="fas fa-shield-alt"></i>
-        Secure Management System | Last Updated: February 3, 2026
-      </small>
-    </div>
   </div>
 </main>
 
-<app-modal [isOpen]="isModalOpen" (close)="closeModal()"></app-modal>
+<app-modal [selectedIds]="selectedIds" [isApprove]="isApprove" (onSuccess)="loadData()"></app-modal>
 
 
 

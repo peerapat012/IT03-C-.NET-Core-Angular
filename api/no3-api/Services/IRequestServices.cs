@@ -9,7 +9,7 @@ public interface IRequestServices
     Task<RequestDto?> GetRequestByIdAsync(int requestId);
     Task<RequestDto> CreateRequestAsync(CreateRequestDto requestDto);
     Task<bool> UpdateRequestAsync(int id, UpdateRequestDto requestDto);
-    Task<bool> ApproveRequestAsync(int id, int status);
-    Task<bool> RejectRequestAsync(int id, int status);
+    Task<bool> ApproveRequestAsync(int id, int status, string reason);
+    Task<bool> RejectRequestAsync(int id, int status, string reason);
     Task<bool> DeleteRequestAsync(int requestId);
 }

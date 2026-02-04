@@ -13,6 +13,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Request")));
 builder.Services.AddScoped<IRequestServices, RequestServices>();
 builder.AddRequestDb();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -25,5 +34,6 @@ if (app.Environment.IsDevelopment())
 
 app.MigrateDatabase();
 app.UseHttpsRedirection();
+app.UseCors("AllowAngularApp");
 app.MapControllers();
 app.Run();

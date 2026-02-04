@@ -62,22 +62,24 @@ public class RequestServices(AppDbContext context) : IRequestServices
         return true;
     }
 
-    public async Task<bool> ApproveRequestAsync(int id, int status)
+    public async Task<bool> ApproveRequestAsync(int id, int status, string reason)
     {
         var existingRequest = await context.Requests.FirstOrDefaultAsync(request => request.Id == id);
         if (existingRequest == null) return false;
 
         existingRequest.Status = (RequestStatus)status;
+        existingRequest.ResponseReason = reason;
         await context.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> RejectRequestAsync(int id, int status)
+    public async Task<bool> RejectRequestAsync(int id, int status, string reason)
     {
         var existingRequest = await context.Requests.FirstOrDefaultAsync(request => request.Id == id);
         if (existingRequest == null) return false;
 
         existingRequest.Status = (RequestStatus)status;
+        existingRequest.ResponseReason = reason;
         await context.SaveChangesAsync();
         return true;
     }
