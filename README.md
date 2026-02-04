@@ -12,6 +12,9 @@
 # เข้าโฟลเดอร์ api
 cd Backend
 
+#ติดตั้ง package
+dotnet restore
+
 # อัปเดตฐานข้อมูล SQLite
 dotnet ef database update
 
