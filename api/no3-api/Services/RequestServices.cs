@@ -31,6 +31,18 @@ public class RequestServices(AppDbContext context) : IRequestServices
         return exitsRequest;
     }
 
+    public async Task<List<RequestDto>> GetRequestByMutipleIdAsync(List<int> reqeustIds)
+    {
+        var exitsRequests = await context.Requests.Select(request => new RequestDto
+        {
+            Id = request.Id,
+            Title = request.Title,
+            ResponseReason = request.ResponseReason,
+            Status = request.Status
+        }).Where(request => reqeustIds.Contains(request.Id)).ToListAsync();
+        return exitsRequests;
+    }
+
     public async Task<RequestDto> CreateRequestAsync(CreateRequestDto requestDto)
     {
         var newRequest = new RequestListModel
@@ -118,6 +130,4 @@ public class RequestServices(AppDbContext context) : IRequestServices
         await context.SaveChangesAsync();
         return true;
     }
-
-
 }

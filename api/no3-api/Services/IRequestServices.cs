@@ -7,6 +7,7 @@ public interface IRequestServices
 {
     Task<List<RequestDto>> GetAllRequestsAsync();
     Task<RequestDto?> GetRequestByIdAsync(int requestId);
+    Task<List<RequestDto>> GetRequestByMutipleIdAsync(List<int> reqeustIds);
     Task<RequestDto> CreateRequestAsync(CreateRequestDto requestDto);
     Task<bool> UpdateRequestAsync(int id, UpdateRequestDto requestDto);
     Task<bool> ApproveRequestPerIdAsync(int id, int status, string reason);
