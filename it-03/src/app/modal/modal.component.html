@@ -1,0 +1,44 @@
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" *ngIf="isOpen">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if(isApprove){
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    Approve Request
+                </h5>
+                }@else {
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle"></i>
+                    Reject Request
+                </h5>
+                }
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <label for="approveComments" class="form-label">
+                    <i class="fas fa-comment"></i>
+                    Comments (Optional)
+                </label>
+                @if (isApprove) {
+                <textarea class="form-control" id="approveComments"
+                    placeholder="Add any comments or notes for approval..."></textarea>
+                }@else {
+                <textarea class="form-control" id="approveComments"
+                    placeholder="Add any comments or notes for reject..."></textarea>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-modal-cancel" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-modal-confirm btn-approve-modal">
+                    <i class="fas fa-check"></i>
+                    Confirm Approval
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+# --- .NET ---
+bin/
+obj/
+*.user
+*.suo
+*.db
+*.sqlite
+
+# --- Node / Angular ---
+node_modules/
+dist/
+.angular/
+npm-debug.log
+
+# --- OS ---
+.DS_Store
+app.db
+
+# --- VS / VSCode ---
+.vscode/
+.idea/
