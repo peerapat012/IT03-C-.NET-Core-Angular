@@ -62,7 +62,7 @@ public class RequestServices(AppDbContext context) : IRequestServices
         return true;
     }
 
-    public async Task<bool> ApproveRequestAsync(int id, int status, string reason)
+    public async Task<bool> ApproveRequestPerIdAsync(int id, int status, string reason)
     {
         var existingRequest = await context.Requests.FirstOrDefaultAsync(request => request.Id == id);
         if (existingRequest == null) return false;
@@ -73,7 +73,7 @@ public class RequestServices(AppDbContext context) : IRequestServices
         return true;
     }
 
-    public async Task<bool> RejectRequestAsync(int id, int status, string reason)
+    public async Task<bool> RejectRequestPerIdAsync(int id, int status, string reason)
     {
         var existingRequest = await context.Requests.FirstOrDefaultAsync(request => request.Id == id);
         if (existingRequest == null) return false;
@@ -92,4 +92,32 @@ public class RequestServices(AppDbContext context) : IRequestServices
         await context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<bool> ApproveRequestMutipleIdAsync(int status, MultiApproveOrRejectDto approveDto)
+    {
+        var existingRequests = await context.Requests.Where(request => approveDto.Ids.Contains(request.Id)).ToListAsync();
+        if (!existingRequests.Any()) return false;
+        foreach (var existingRequest in existingRequests)
+        {
+            existingRequest.ResponseReason = approveDto.ResponseReason;
+            existingRequest.Status = (RequestStatus)status;
+        }
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RejectRequestMutipleIdAsync(int status, MultiApproveOrRejectDto rejectDto)
+    {
+        var existingRequests = await context.Requests.Where(request => rejectDto.Ids.Contains(request.Id)).ToListAsync();
+        if (!existingRequests.Any()) return false;
+        foreach (var existingRequest in existingRequests)
+        {
+            existingRequest.ResponseReason = rejectDto.ResponseReason;
+            existingRequest.Status = (RequestStatus)status;
+        }
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+
 }

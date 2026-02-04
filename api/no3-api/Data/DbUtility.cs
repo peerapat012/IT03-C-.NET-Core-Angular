@@ -48,15 +48,15 @@ public static class DbUtility
                         {
                             Id = 4,
                             Title = "Request for Overtime Approval",
-                            ResponseReason = "Approved due to project deadline",
-                            Status = RequestStatus.Approved
+                            ResponseReason = "",
+                            Status = RequestStatus.Pending
                         },
                         new RequestListModel
                         {
                             Id = 5,
                             Title = "Request for Budget Increase",
-                            ResponseReason = "Rejected due to budget constraints",
-                            Status = RequestStatus.Rejected
+                            ResponseReason = "",
+                            Status = RequestStatus.Pending
                         }
                     );
                     context.SaveChanges();

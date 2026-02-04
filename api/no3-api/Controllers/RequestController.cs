@@ -45,7 +45,7 @@ public class RequestController(IRequestServices services) : ControllerBase
         if (existingRequest?.Status == RequestStatus.Approved)
             return NotFound("This request with the given id is already approved");
 
-        var updatedRequest = await services.ApproveRequestAsync(id, 0, requestDto.ResponseReason);
+        var updatedRequest = await services.ApproveRequestPerIdAsync(id, 0, requestDto.ResponseReason);
         return updatedRequest
             ? Ok(await services.GetRequestByIdAsync(id))
             : NotFound("Request with the given id does not exist");
@@ -58,9 +58,37 @@ public class RequestController(IRequestServices services) : ControllerBase
         if (existingRequest?.Status == RequestStatus.Rejected)
             return NotFound("This request with the given id is already rejected");
 
-        var updatedRequest = await services.ApproveRequestAsync(id, 1, requestDto.ResponseReason);
+        var updatedRequest = await services.ApproveRequestPerIdAsync(id, 1, requestDto.ResponseReason);
         return updatedRequest
             ? Ok(await services.GetRequestByIdAsync(id))
+            : NotFound("Request with the given id does not exist");
+    }
+
+    [HttpPatch("approve")]
+    public async Task<ActionResult> MultipleApproveAsync([FromBody] MultiApproveOrRejectDto requestDto)
+    {
+        var existingRequests = await services.GetAllRequestsAsync();
+        var filter = existingRequests.Where(request => requestDto.Ids.Contains(request.Id)).ToList();
+        if (filter.Any(q => q.Status != RequestStatus.Pending))
+            return NotFound("Some of this request with the given id is already approved");
+
+        var approveRequest = await services.ApproveRequestMutipleIdAsync(0, requestDto);
+        return approveRequest
+            ? Ok(await services.GetAllRequestsAsync())
+            : NotFound("Request with the given id does not exist");
+    }
+
+    [HttpPatch("reject")]
+    public async Task<ActionResult> MultipleRejectAsync([FromBody] MultiApproveOrRejectDto rejectDto)
+    {
+        var existingRequests = await services.GetAllRequestsAsync();
+        var filter = existingRequests.Where(request => rejectDto.Ids.Contains(request.Id)).ToList();
+        if (filter.Any(q => q.Status != RequestStatus.Pending))
+            return NotFound("Some of this request with the given id is already rejected");
+
+        var rejectRequest = await services.RejectRequestMutipleIdAsync(1, rejectDto);
+        return rejectRequest
+            ? Ok(await services.GetAllRequestsAsync())
             : NotFound("Request with the given id does not exist");
     }
 

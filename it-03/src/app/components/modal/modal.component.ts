@@ -2,7 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
-import { ApproveOrRejectRequest } from '../../models/request.model';
+import { MutipleApproveOrRejectRequest } from '../../models/request.model';
 
 @Component({
   selector: 'app-modal',
@@ -19,18 +19,21 @@ export class ModalComponent {
 
   constructor(private apiService: ApiService) { }
 
-  approveOrRejectRequest: ApproveOrRejectRequest = {
-    responseReason: ""
-  }
+  reasonText = "";
+
 
   async onSubmit() {
+    const approveOrRejectRequest: MutipleApproveOrRejectRequest = {
+      ids: this.selectedIds,
+      responseReason: this.reasonText
+    }
     if (this.isApprove == true) {
-      await this.apiService.Approve(this.selectedIds[0], this.approveOrRejectRequest)
-      this.approveOrRejectRequest.responseReason = "";
+      await this.apiService.MutipleApprove(approveOrRejectRequest)
+      this.reasonText = "";
       this.onSuccess.emit();
     } else {
-      await this.apiService.Reject(this.selectedIds[0], this.approveOrRejectRequest)
-      this.approveOrRejectRequest.responseReason = "";
+      await this.apiService.MutipleReject(approveOrRejectRequest)
+      this.reasonText = "";
       this.onSuccess.emit();
     }
   }

@@ -8,3 +8,8 @@ export interface Request {
 export interface ApproveOrRejectRequest {
     responseReason: string
 }
+
+export interface MutipleApproveOrRejectRequest {
+    ids: number[],
+    responseReason: string
+}

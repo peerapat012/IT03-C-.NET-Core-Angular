@@ -22,10 +22,10 @@
                     Comments (Optional)
                 </label>
                 @if (isApprove) {
-                <textarea [(ngModel)]="approveOrRejectRequest.responseReason" class="form-control" id="approveComments"
+                <textarea [(ngModel)]="reasonText" class="form-control" id="approveComments"
                     placeholder="Add any comments or notes for approval..."></textarea>
                 }@else {
-                <textarea [(ngModel)]="approveOrRejectRequest.responseReason" class="form-control" id="approveComments"
+                <textarea [(ngModel)]="reasonText" class="form-control" id="approveComments"
                     placeholder="Add any comments or notes for reject..."></textarea>
                 }
             </div>

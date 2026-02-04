@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApproveOrRejectRequest, Request } from '../models/request.model';
+import { ApproveOrRejectRequest, MutipleApproveOrRejectRequest, Request } from '../models/request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +51,27 @@ export class ApiService {
     }
   }
 
+  async MutipleApprove(requests: MutipleApproveOrRejectRequest): Promise<any> {
+    try {
+      const response = await fetch(`${this.apiUrl}/Request/approve`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requests)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log("pass");
+      return response.json();
+    } catch (err) {
+      console.log('Error patching data:', err);
+      throw err;
+    }
+  }
+
   async Reject(id: number, reason: ApproveOrRejectRequest): Promise<any> {
     try {
       const response = await fetch(`${this.apiUrl}/Request/${id}/reject`, {
@@ -69,6 +90,27 @@ export class ApiService {
       return await response.json();
     } catch (err) {
       console.error('Error patching data:', err);
+      throw err;
+    }
+  }
+
+  async MutipleReject(requests: MutipleApproveOrRejectRequest): Promise<any> {
+    try {
+      const response = await fetch(`${this.apiUrl}/Request/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requests)
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      console.log("pass");
+
+      return response.json();
+    } catch (err) {
+      console.log('Error patching data:', err);
       throw err;
     }
   }
